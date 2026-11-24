@@ -1,4 +1,4 @@
-﻿// Ã–nce internetten al (gÃ¼ncel kalsÄ±n), yoksa Ã¶nbellekten aÃ§ (Ã§evrimdÄ±ÅŸÄ± Ã§alÄ±ÅŸsÄ±n)
+// Önce internetten al (güncel kalsın), yoksa önbellekten aç (çevrimdışı çalışsın)
 const CACHE = "gramermatik-v5";
 const DOSYALAR = ["./", "index.html", "veri.js", "gramer.js", "manifest.json", "ikon.svg"];
 self.addEventListener("install", e => e.waitUntil(caches.open(CACHE).then(c => c.addAll(DOSYALAR)).then(() => self.skipWaiting())));
