@@ -114,6 +114,38 @@ nav.alt button i{display:block;font-style:normal;font-size:22px}
 .yanlis-liste{display:flex;flex-direction:column;gap:6px}
 .yanlis-liste div{background:var(--kart);border:1px solid var(--cizgi);border-radius:10px;padding:8px 12px;font-size:15px}
 .yanlis-liste small{display:block;color:var(--soluk);font-size:13px}
+/* taşma düzeltmeleri */
+header{gap:8px}
+header h1,.sayac{white-space:nowrap}
+.cubuk{padding:0 2px;overflow:hidden}
+.cubuk,.cubuk small{white-space:nowrap}
+.cubuk small{align-self:stretch;text-align:center;overflow:hidden}
+.cubuk-sec .ad{min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.dugmeler .btn{white-space:nowrap;min-width:0}
+.dugmeler .btn.ana,#dinleTr{flex:1}
+.cumle .en,.cumle .tr,.soru-kart .metin,.secenekler button{overflow-wrap:anywhere}
+@media (max-width:360px){
+  main{padding:0 10px 10px}
+  header{padding:10px 10px 4px}
+  header h1{font-size:21px}
+  .sekmeler button{font-size:13px}
+  .cubuk-sec{gap:6px}
+  .cubuk-sec .btn{padding:8px 10px}
+  .cubuk-sec .ad{font-size:15px}
+  .dugmeler .btn{padding:9px 10px;font-size:14px}
+  .cumle .en,.soru-kart .metin{font-size:21px}
+  .cumle .tr{font-size:17px}
+}
+/* kısa ekranlar: cümle kartı küçülsün, plakaya yer kalsın */
+@media (max-height:700px){
+  .cumle{padding:10px 12px}
+  .cumle .en{font-size:20px}
+  .cumle .tr{font-size:16px}
+  .ipucu{font-size:12.5px;padding:6px 10px;margin-top:6px}
+  .dugmeler{margin-top:8px}
+  .cubuk-sec{margin-top:8px}
+  .sekmeler{margin:4px 0 8px}
+}
 /* nasıl çalışır penceresi */
 .bilgi{position:fixed;inset:0;background:rgba(0,0,0,.45);display:flex;align-items:center;justify-content:center;padding:16px;z-index:20;transition:opacity .35s}
 .bilgi.kapan{opacity:0;pointer-events:none}
@@ -257,8 +289,19 @@ function ciz(){
   $("cTr").textContent = c.tr;
   $("cIpucu").textContent = "💡 " + IPUCU[durum.plaka][durum.satir];
   depo.koy("durum", durum);
+  sigdir();
   ipucuOku();
 }
+// Sığmayan yazıyı (çubuk ve plaka satırları) taşana kadar küçült
+function sigdir(){
+  document.querySelectorAll("#cubuk, #cubuk small, .satir").forEach(e=>{
+    e.style.fontSize = "";
+    let f = parseFloat(getComputedStyle(e).fontSize);
+    while(e.scrollWidth > e.clientWidth + 1 && f > 7){ f -= .5; e.style.fontSize = f + "px"; }
+  });
+}
+window.addEventListener("resize", ()=>{ sigdir(); });
+if(document.fonts) document.fonts.ready.then(sigdir); // yazı tipi yüklenince yeniden ölç
 // plaka alanı: aşağıda gizli satır varsa "▼ kaydır" etiketi görünür
 function ipucuOku(){ const a = $("plakaAlan"); $("asagi").classList.toggle("yok", a.scrollTop + a.clientHeight >= a.scrollHeight - 6); }
 $("plakaAlan").addEventListener("scroll", ipucuOku, {passive:true});
