@@ -8,35 +8,36 @@
 <link rel="manifest" href="manifest.json">
 <link rel="icon" href="ikon.svg">
 <link rel="apple-touch-icon" href="ikon.svg">
-<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@600;700;800;900&subset=latin-ext&display=swap" rel="stylesheet">
 <style>
 :root{
   --kirmizi:#d62828;--kirmizi-k:#a51c1c;--mavi:#7cc6e8;--mavi-k:#3f93bb;--sari:#f4a72a;--sari-k:#c27a0e;
   --zemin:#f6f1e7;--kart:#fff;--yazi:#1d1d1f;--soluk:#6b6b70;--cizgi:#e4ddcf;
-  --plaka:var(--kirmizi);--plaka-k:var(--kirmizi-k);--plaka-yazi:#1b0a0a;
+  --yazitipi:"Nunito",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;--plaka:var(--kirmizi);--plaka-k:var(--kirmizi-k);--plaka-yazi:#1b0a0a;
 }
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--zemin:#17171a;--kart:#232327;--yazi:#f2f2f4;--soluk:#a0a0a8;--cizgi:#34343a}}
 :root[data-theme="dark"]{--zemin:#17171a;--kart:#232327;--yazi:#f2f2f4;--soluk:#a0a0a8;--cizgi:#34343a}
+button,input{font-family:inherit}
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 html,body{margin:0;height:100%}
-body{background:var(--zemin);color:var(--yazi);font-family:Fredoka,system-ui,sans-serif;display:flex;flex-direction:column;max-width:560px;margin:0 auto}
+body{background:var(--zemin);color:var(--yazi);font-family:var(--yazitipi);display:flex;flex-direction:column;max-width:560px;margin:0 auto}
 header{display:flex;align-items:center;justify-content:space-between;padding:14px 16px 6px}
-header h1{margin:0;font-size:24px;letter-spacing:.5px}
+header h1{margin:0;font-size:24px;font-weight:900;letter-spacing:.3px}
 header h1 span{color:var(--kirmizi)}
 .sayac{font-size:13px;color:var(--soluk)}
 main{flex:1;overflow:auto;padding:0 16px 16px}
 nav.alt{display:flex;border-top:1px solid var(--cizgi);background:var(--kart);padding-bottom:env(safe-area-inset-bottom)}
-nav.alt button{flex:1;border:0;background:none;padding:10px 0 12px;font:600 14px Fredoka;color:var(--soluk);cursor:pointer}
+nav.alt button{flex:1;border:0;background:none;padding:10px 0 12px;font:600 14px var(--yazitipi);color:var(--soluk);cursor:pointer}
 nav.alt button.aktif{color:var(--kirmizi)}
 nav.alt button i{display:block;font-style:normal;font-size:22px}
 .sekmeler{display:flex;gap:6px;margin:6px 0 12px}
-.sekmeler button{flex:1;border:0;border-radius:12px;padding:9px 0;font:600 15px Fredoka;cursor:pointer;color:#1b0a0a;opacity:.45;border-bottom:4px solid rgba(0,0,0,.25)}
+.sekmeler button{flex:1;border:0;border-radius:12px;padding:9px 0;font:600 15px var(--yazitipi);cursor:pointer;color:#1b0a0a;opacity:.45;border-bottom:4px solid rgba(0,0,0,.25)}
 .sekmeler button.aktif{opacity:1;transform:translateY(-2px)}
 .k{background:var(--kirmizi)}.m{background:var(--mavi)}.s{background:var(--sari)}
 /* plaka */
 .plaka{background:var(--plaka);border-radius:14px;padding:12px 8px;box-shadow:0 6px 0 var(--plaka-k),0 10px 24px rgba(0,0,0,.18);display:grid;grid-template-columns:1fr 84px 1fr;column-gap:8px;color:var(--plaka-yazi);text-shadow:0 1px 0 rgba(255,255,255,.25)}
 .sutun{display:flex;flex-direction:column}
-.satir{height:30px;display:flex;align-items:center;font-weight:700;font-size:12.5px;line-height:1;cursor:pointer;border-radius:6px;padding:0 4px;white-space:nowrap;overflow:hidden}
+.satir{height:30px;display:flex;align-items:center;font-weight:800;font-size:12.5px;letter-spacing:.2px;line-height:1;cursor:pointer;border-radius:6px;padding:0 4px;white-space:nowrap;overflow:hidden}
 .sol .satir{justify-content:flex-end;text-align:right}
 .sag .satir{font-size:11.5px}
 .satir.kapali{opacity:.28;cursor:default}
@@ -46,11 +47,11 @@ nav.alt button i{display:block;font-style:normal;font-size:22px}
 .cubuk small{font-size:10px;opacity:.8}
 /* cümle kartı */
 .cumle{background:var(--kart);border-radius:16px;padding:14px 16px;margin-top:18px;border:1px solid var(--cizgi);position:sticky;bottom:0;box-shadow:0 -6px 20px rgba(0,0,0,.08)}
-.cumle .en{font-size:24px;font-weight:700}
+.cumle .en{font-size:24px;font-weight:800}
 .cumle .tr{font-size:19px;color:var(--soluk);margin-top:4px}
 .cumle .tr b{color:var(--yazi);font-weight:600}
 .dugmeler{display:flex;gap:8px;margin-top:12px}
-.btn{border:0;border-radius:12px;padding:10px 14px;font:600 15px Fredoka;cursor:pointer;background:var(--zemin);color:var(--yazi);border:1px solid var(--cizgi)}
+.btn{border:0;border-radius:12px;padding:10px 14px;font:600 15px var(--yazitipi);cursor:pointer;background:var(--zemin);color:var(--yazi);border:1px solid var(--cizgi)}
 .btn.ana{background:var(--kirmizi);color:#fff;border-color:var(--kirmizi-k)}
 .cubuk-sec{display:flex;align-items:center;gap:8px;margin-top:14px}
 .cubuk-sec .btn{flex:none}
@@ -59,16 +60,16 @@ nav.alt button i{display:block;font-style:normal;font-size:22px}
 .perde{position:fixed;inset:0;background:rgba(0,0,0,.4);display:none;align-items:flex-end;justify-content:center;z-index:9}
 .perde.acik{display:flex}
 .liste{background:var(--kart);width:100%;max-width:560px;max-height:78vh;border-radius:18px 18px 0 0;padding:14px 16px;display:flex;flex-direction:column}
-.liste input{font:500 16px Fredoka;padding:10px 12px;border-radius:10px;border:1px solid var(--cizgi);background:var(--zemin);color:var(--yazi);width:100%}
+.liste input{font:600 16px var(--yazitipi);padding:10px 12px;border-radius:10px;border:1px solid var(--cizgi);background:var(--zemin);color:var(--yazi);width:100%}
 .izgara{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;overflow:auto;margin-top:10px;padding-bottom:10px}
-.izgara button{border:0;border-radius:10px;padding:8px 4px;font:600 13px Fredoka;background:var(--plaka);color:var(--plaka-yazi);cursor:pointer;border-bottom:3px solid var(--plaka-k)}
-.izgara button small{display:block;font-weight:500;font-size:11px;opacity:.8}
+.izgara button{border:0;border-radius:10px;padding:8px 4px;font:600 13px var(--yazitipi);background:var(--plaka);color:var(--plaka-yazi);cursor:pointer;border-bottom:3px solid var(--plaka-k)}
+.izgara button small{display:block;font-weight:600;font-size:11px;opacity:.8}
 /* alıştırma */
 .soru-kart{background:var(--kart);border:1px solid var(--cizgi);border-radius:16px;padding:18px 16px;text-align:center;margin-top:6px}
 .soru-kart .etiket{font-size:13px;color:var(--soluk)}
-.soru-kart .metin{font-size:24px;font-weight:700;margin-top:6px}
+.soru-kart .metin{font-size:24px;font-weight:800;margin-top:6px}
 .secenekler{display:flex;flex-direction:column;gap:8px;margin-top:14px}
-.secenekler button{text-align:left;border:1px solid var(--cizgi);background:var(--kart);color:var(--yazi);border-radius:12px;padding:12px 14px;font:500 17px Fredoka;cursor:pointer}
+.secenekler button{text-align:left;border:1px solid var(--cizgi);background:var(--kart);color:var(--yazi);border-radius:12px;padding:12px 14px;font:600 17px var(--yazitipi);cursor:pointer}
 .secenekler button.dogru{background:#2a9d5c;color:#fff;border-color:#2a9d5c}
 .secenekler button.yanlis{background:var(--kirmizi);color:#fff;border-color:var(--kirmizi)}
 .puan{display:flex;justify-content:space-around;margin:4px 0 10px;font-size:14px;color:var(--soluk)}
@@ -76,12 +77,36 @@ nav.alt button i{display:block;font-style:normal;font-size:22px}
 .mod{display:flex;gap:6px}
 .mod button{flex:1}
 .mod button.aktif{background:var(--yazi);color:var(--zemin)}
+/* nasıl çalışır penceresi */
+.bilgi{position:fixed;inset:0;background:rgba(0,0,0,.45);display:flex;align-items:center;justify-content:center;padding:16px;z-index:20;transition:opacity .35s}
+.bilgi.kapan{opacity:0;pointer-events:none}
+.bilgi-kart{background:var(--kart);color:var(--yazi);border-radius:20px;max-width:380px;width:100%;padding:20px 20px 22px;position:relative;overflow:hidden;box-shadow:0 20px 50px rgba(0,0,0,.3)}
+.bilgi-kart h2{margin:0 0 14px;font-size:22px;font-weight:900}
+.bilgi-kart ol{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:10px}
+.bilgi-kart li{display:flex;gap:10px;align-items:flex-start;font-size:15px;line-height:1.35}
+.bilgi-kart li span{flex:none;width:26px;height:26px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-weight:900;color:#1b0a0a}
+.bilgi-kart .kapat{position:absolute;top:12px;right:12px;border:0;background:var(--zemin);color:var(--yazi);width:32px;height:32px;border-radius:50%;font-size:15px;cursor:pointer}
+.bilgi-kart .sure{position:absolute;left:0;bottom:0;height:5px;width:100%;background:var(--kirmizi);transform-origin:left}
+@keyframes azal{to{transform:scaleX(0)}}
+.yardim{border:1px solid var(--cizgi);background:var(--kart);color:var(--yazi);width:30px;height:30px;border-radius:50%;font-weight:900;cursor:pointer;margin-left:8px}
 .gizli{display:none!important}
 @media (max-width:380px){.plaka{grid-template-columns:1fr 70px 1fr}.satir{font-size:11px}.sag .satir{font-size:10px}}
 </style>
 </head>
 <body>
-<header><h1>Gramer<span>matik</span></h1><div class="sayac" id="sayac"></div></header>
+<header><h1>Gramer<span>matik</span></h1><div style="display:flex;align-items:center"><div class="sayac" id="sayac"></div><button class="yardim" id="yardim" aria-label="Nasıl çalışır?">?</button></div></header>
+
+<div class="bilgi kapan" id="bilgi" role="dialog" aria-labelledby="bilgiBaslik"><div class="bilgi-kart">
+  <button class="kapat" id="bilgiKapat" aria-label="Kapat">✕</button>
+  <h2 id="bilgiBaslik">Nasıl çalışır?</h2>
+  <ol>
+    <li><span class="k">1</span><div>Üstten bir <b>plaka</b> seç: Fiil, Sıfat, İsim ya da Soru.</div></li>
+    <li><span class="m">2</span><div>◀ ▶ ile ya da <b>Çubuklar</b>dan bir kelime çubuğu seç.</div></li>
+    <li><span class="s">3</span><div>Plakada bir <b>satıra dokun</b>: çubuk oraya kayar, cümle altta çıkar.</div></li>
+    <li><span class="k">4</span><div>🔊 ile dinle, sesli tekrar et. <b>Alıştırma</b> sekmesinde kendini test et!</div></li>
+  </ol>
+  <div class="sure" id="bilgiSure"></div>
+</div></div>
 
 <main>
   <section id="kutu">
@@ -255,7 +280,20 @@ document.querySelectorAll("nav.alt button").forEach(b=>b.onclick=()=>{
   if(b.dataset.sayfa==="alistirma" && !soruV) yeniSoru();
 });
 
-ciz(); puanCiz();
+// --- nasıl çalışır penceresi: 5 sn sonra kendiliğinden kapanır ---
+let bilgiZaman;
+function bilgiKapat(){ clearTimeout(bilgiZaman); $("bilgi").classList.add("kapan"); }
+function bilgiAc(){
+  const b = $("bilgi"), s = $("bilgiSure");
+  b.classList.remove("kapan");
+  s.style.animation = "none"; void s.offsetWidth; s.style.animation = "azal 5s linear forwards";
+  clearTimeout(bilgiZaman); bilgiZaman = setTimeout(bilgiKapat, 5000);
+}
+$("bilgiKapat").onclick = bilgiKapat;
+$("bilgi").onclick = e => { if(e.target.id==="bilgi") bilgiKapat(); };
+$("yardim").onclick = bilgiAc;
+
+ciz(); puanCiz(); bilgiAc();
 if("serviceWorker" in navigator && location.protocol.startsWith("http")) navigator.serviceWorker.register("sw.js").catch(()=>{});
 </script>
 </body>
