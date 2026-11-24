@@ -77,6 +77,33 @@ nav.alt button i{display:block;font-style:normal;font-size:22px}
 .mod{display:flex;gap:6px}
 .mod button{flex:1}
 .mod button.aktif{background:var(--yazi);color:var(--zemin)}
+/* ipucu, tekrar, ilerleme */
+.ipucu{margin-top:10px;padding:9px 12px;border-radius:10px;background:var(--zemin);font-size:14px;line-height:1.35;border-left:4px solid var(--plaka)}
+.ipucu:empty{display:none}
+#qIpucu{border-left-color:var(--kirmizi);margin-top:12px}
+.tekrar-btn{width:100%;margin:-4px 0 12px;display:flex;justify-content:space-between;align-items:center}
+.tekrar-btn span{background:var(--kirmizi);color:#fff;border-radius:999px;padding:1px 9px;font-size:13px}
+.tekrar-btn.aktif{background:var(--yazi);color:var(--zemin)}
+.bos{text-align:center;color:var(--soluk);padding:24px 8px}
+#ilerleme h3{margin:20px 0 8px;font-size:17px;font-weight:900}
+#ilerleme h3 small{color:var(--soluk);font-weight:600;font-size:13px}
+.ozet{display:flex;align-items:center;gap:16px;background:var(--kart);border:1px solid var(--cizgi);border-radius:16px;padding:16px;margin-top:6px}
+.halka{--y:0;flex:none;width:96px;height:96px;border-radius:50%;background:conic-gradient(var(--kirmizi) calc(var(--y)*1%),var(--cizgi) 0);display:flex;flex-direction:column;align-items:center;justify-content:center;position:relative}
+.halka::before{content:"";position:absolute;inset:10px;border-radius:50%;background:var(--kart)}
+.halka b,.halka small{position:relative}
+.halka b{font-size:22px;font-weight:900}
+.halka small{font-size:11px;color:var(--soluk)}
+.ozet-yazi{font-size:17px}
+.ozet-yazi b{font-size:22px;font-weight:900}
+.ozet-yazi small{color:var(--soluk);font-size:13px}
+.bar{background:var(--kart);border:1px solid var(--cizgi);border-radius:12px;padding:10px 12px;margin-bottom:8px}
+.bar-ust{display:flex;justify-content:space-between;font-size:15px;font-weight:700;margin-bottom:6px}
+.bar-ust span{color:var(--soluk);font-weight:600;font-size:13px}
+.bar-ic{height:10px;border-radius:99px;background:var(--cizgi);overflow:hidden}
+.bar-ic div{height:100%;border-radius:99px;transition:width .5s}
+.yanlis-liste{display:flex;flex-direction:column;gap:6px}
+.yanlis-liste div{background:var(--kart);border:1px solid var(--cizgi);border-radius:10px;padding:8px 12px;font-size:15px}
+.yanlis-liste small{display:block;color:var(--soluk);font-size:13px}
 /* nasıl çalışır penceresi */
 .bilgi{position:fixed;inset:0;background:rgba(0,0,0,.45);display:flex;align-items:center;justify-content:center;padding:16px;z-index:20;transition:opacity .35s}
 .bilgi.kapan{opacity:0;pointer-events:none}
@@ -121,6 +148,7 @@ nav.alt button i{display:block;font-style:normal;font-size:22px}
     <div class="cumle">
       <div class="en" id="cEn"></div>
       <div class="tr" id="cTr"></div>
+      <div class="ipucu" id="cIpucu"></div>
       <div class="dugmeler">
         <button class="btn ana" id="dinleEn">🔊 İngilizce</button>
         <button class="btn" id="dinleTr">🔊 Türkçe</button>
@@ -134,19 +162,33 @@ nav.alt button i{display:block;font-style:normal;font-size:22px}
       <button class="btn aktif" data-mod="tr">Türkçe → İngilizce</button>
       <button class="btn" data-mod="en">İngilizce → Türkçe</button>
     </div>
+    <button class="btn tekrar-btn" data-mod="tekrar" id="tekrarBtn">🔁 Yanlışlarımı tekrar et <span id="yanlisSay">0</span></button>
     <div class="puan"><div><b id="pDogru">0</b>doğru</div><div><b id="pSeri">0</b>seri</div><div><b id="pRekor">0</b>rekor</div></div>
     <div class="soru-kart">
       <div class="etiket" id="qEtiket"></div>
       <div class="metin" id="qMetin"></div>
     </div>
     <div class="secenekler" id="qSec"></div>
+    <div class="ipucu gizli" id="qIpucu"></div>
     <div class="dugmeler"><button class="btn" id="qDinle">🔊 Dinle</button><button class="btn ana gizli" id="qSonraki" style="flex:1">Sonraki ▶</button></div>
+  </section>
+
+  <section id="ilerleme" class="gizli">
+    <div class="ozet">
+      <div class="halka" id="halka"><b id="genelYuzde">%0</b><small>öğrenildi</small></div>
+      <div class="ozet-yazi"><b id="ogrenSay">0</b> / <span id="toplamSay"></span> cümle<br><small>Alıştırmada doğru bildiğin her cümle burada sayılır.</small></div>
+    </div>
+    <h3>Plakalar</h3>
+    <div id="cubuklar"></div>
+    <h3>Yanlışlarım <small id="yanlisBaslik"></small></h3>
+    <div id="yanlisListe" class="yanlis-liste"></div>
   </section>
 </main>
 
 <nav class="alt">
   <button class="aktif" data-sayfa="kutu"><i>🧰</i>Kutu</button>
   <button data-sayfa="alistirma"><i>🎯</i>Alıştırma</button>
+  <button data-sayfa="ilerleme"><i>📈</i>İlerleme</button>
 </nav>
 
 <div class="perde" id="perde"><div class="liste">
@@ -200,6 +242,7 @@ function ciz(){
   const c = cumle(durum.plaka, durum.satir, w);
   $("cEn").textContent = c.en;
   $("cTr").textContent = c.tr;
+  $("cIpucu").textContent = "💡 " + IPUCU[durum.plaka][durum.satir];
   depo.koy("durum", durum);
 }
 $("plaka").onclick = e => {
@@ -234,11 +277,27 @@ $("perde").onclick = e => { if(e.target.id==="perde") $("perde").classList.remov
 
 // --- alıştırma ---
 let mod = "tr", skor = depo.al("skor",{dogru:0,seri:0,rekor:0}), soruV = null;
+// öğrenilenler (doğru bilinen cümleler) ve yanlışlar: "plaka|satır|kelime" anahtarıyla saklanır
+const anahtar = a => `${a.k}|${a.s}|${a.w}`;
+const coz = key => { const [k,s,w] = key.split("|"); return {k, s:+s, w:+w}; };
+const ogrenilen = new Set(depo.al("ogren", []));
+let yanlislar = depo.al("yanlis", []);
+function kaydet(){ depo.koy("ogren", [...ogrenilen]); depo.koy("yanlis", yanlislar); $("yanlisSay").textContent = yanlislar.length; }
 const rastgele = n => Math.floor(Math.random()*n);
 function rastgeleCumle(){
+  if(mod==="tekrar") return coz(yanlislar[rastgele(yanlislar.length)]);
   return TUM_CUMLELER[rastgele(TUM_CUMLELER.length)];
 }
 function yeniSoru(){
+  $("qIpucu").classList.add("gizli");
+  if(mod==="tekrar" && !yanlislar.length){
+    soruV = null;
+    $("qEtiket").textContent = "";
+    $("qMetin").textContent = "🎉 Tekrar edilecek yanlışın yok!";
+    $("qSec").innerHTML = `<div class="bos">Alıştırmada yanlış yaptığın cümleler buraya gelir. Doğru bildikçe listeden çıkar.</div>`;
+    $("qSonraki").classList.add("gizli");
+    return;
+  }
   const a = rastgeleCumle(), p = PLAKALAR[a.k], dogru = cumle(a.k,a.s,p.cubuk()[a.w]);
   const set = new Map([[dogru.en, dogru]]);
   let deneme = 0;
@@ -250,10 +309,11 @@ function yeniSoru(){
     const c = cumle(a.k,s,p.cubuk()[w]); set.set(c.en, c);
   }
   const sec = [...set.values()].sort(()=>Math.random()-.5);
-  soruV = {dogru, sec};
-  $("qEtiket").textContent = mod==="tr" ? "Bu cümlenin İngilizcesi hangisi?" : "Bu cümlenin Türkçesi hangisi?";
-  $("qMetin").textContent = mod==="tr" ? dogru.tr : dogru.en;
-  $("qSec").innerHTML = sec.map((c,i)=>`<button data-i="${i}">${mod==="tr"?c.en:c.tr}</button>`).join("");
+  soruV = {dogru, sec, a};
+  const en = mod==="en";
+  $("qEtiket").textContent = mod==="tekrar" ? "🔁 Tekrar: bu cümlenin İngilizcesi hangisi?" : en ? "Bu cümlenin Türkçesi hangisi?" : "Bu cümlenin İngilizcesi hangisi?";
+  $("qMetin").textContent = en ? dogru.en : dogru.tr;
+  $("qSec").innerHTML = sec.map((c,i)=>`<button data-i="${i}">${en?c.tr:c.en}</button>`).join("");
   $("qSonraki").classList.add("gizli");
   if(mod==="en") soyle(dogru.en,"en-US");
 }
@@ -262,23 +322,50 @@ $("qSec").onclick = e => {
   const b = e.target.closest("button"); if(!b || !$("qSonraki").classList.contains("gizli")) return;
   const c = soruV.sec[+b.dataset.i], ok = c.en===soruV.dogru.en;
   [...$("qSec").children].forEach((x,i)=>{ if(soruV.sec[i].en===soruV.dogru.en) x.classList.add("dogru"); });
-  if(ok){ skor.dogru++; skor.seri++; skor.rekor=Math.max(skor.rekor,skor.seri); }
-  else { b.classList.add("yanlis"); skor.seri=0; if(navigator.vibrate) navigator.vibrate(120); }
-  depo.koy("skor",skor); puanCiz();
+  const key = anahtar(soruV.a);
+  if(ok){ skor.dogru++; skor.seri++; skor.rekor=Math.max(skor.rekor,skor.seri); ogrenilen.add(key); yanlislar = yanlislar.filter(x=>x!==key); }
+  else { b.classList.add("yanlis"); skor.seri=0; ogrenilen.delete(key); if(!yanlislar.includes(key)) yanlislar.push(key); if(navigator.vibrate) navigator.vibrate(120); }
+  depo.koy("skor",skor); puanCiz(); kaydet();
+  $("qIpucu").textContent = "💡 " + IPUCU[soruV.a.k][soruV.a.s];
+  $("qIpucu").classList.remove("gizli");
   soyle(soruV.dogru.en,"en-US");
   $("qSonraki").classList.remove("gizli");
 };
 $("qSonraki").onclick = yeniSoru;
-$("qDinle").onclick = () => soruV && soyle(mod==="tr"?soruV.dogru.tr:soruV.dogru.en, mod==="tr"?"tr-TR":"en-US");
-document.querySelectorAll(".mod button").forEach(b=>b.onclick=()=>{ mod=b.dataset.mod; document.querySelectorAll(".mod button").forEach(x=>x.classList.toggle("aktif",x===b)); yeniSoru(); });
+$("qDinle").onclick = () => soruV && (mod==="en" ? soyle(soruV.dogru.en,"en-US") : soyle(soruV.dogru.tr,"tr-TR"));
+const modDugmeleri = document.querySelectorAll("[data-mod]");
+modDugmeleri.forEach(b=>b.onclick=()=>{ mod=b.dataset.mod; modDugmeleri.forEach(x=>x.classList.toggle("aktif",x===b)); yeniSoru(); });
+
+// --- ilerleme ---
+const RENK_ADI = {fiil:"var(--kirmizi)",sifat:"var(--mavi)",isim:"var(--sari)",soru:"var(--kirmizi)"};
+function ilerlemeCiz(){
+  const yuzdeYaz = y => (y>0 && y<10 ? y.toFixed(1).replace(".",",") : Math.round(y));
+  const n = ogrenilen.size, yuzde = yuzdeYaz(n/TOPLAM*100);
+  $("halka").style.setProperty("--y", n/TOPLAM*100);
+  $("genelYuzde").textContent = "%" + yuzde;
+  $("ogrenSay").textContent = n.toLocaleString("tr");
+  $("toplamSay").textContent = TOPLAM.toLocaleString("tr");
+  $("cubuklar").innerHTML = Object.entries(PLAKALAR).map(([k,p])=>{
+    const top = TUM_CUMLELER.filter(c=>c.k===k).length;
+    const bil = [...ogrenilen].filter(x=>x.startsWith(k+"|")).length;
+    const y = bil/top*100;
+    return `<div class="bar"><div class="bar-ust">${p.ad} plakası <span>${bil} / ${top} · %${yuzdeYaz(y)}</span></div><div class="bar-ic"><div style="width:${y}%;background:${RENK_ADI[k]}"></div></div></div>`;
+  }).join("");
+  $("yanlisBaslik").textContent = yanlislar.length ? `(${yanlislar.length})` : "";
+  $("yanlisListe").innerHTML = yanlislar.length
+    ? yanlislar.slice().reverse().map(key=>{ const a = coz(key), c = cumle(a.k,a.s,PLAKALAR[a.k].cubuk()[a.w]); return `<div>${c.en}<small>${c.tr}</small></div>`; }).join("")
+    : `<div class="bos">Henüz yanlışın yok 👏</div>`;
+}
 
 // --- sayfalar ---
 document.querySelectorAll("nav.alt button").forEach(b=>b.onclick=()=>{
+  const s = b.dataset.sayfa;
   document.querySelectorAll("nav.alt button").forEach(x=>x.classList.toggle("aktif",x===b));
-  $("kutu").classList.toggle("gizli", b.dataset.sayfa!=="kutu");
-  $("alistirma").classList.toggle("gizli", b.dataset.sayfa!=="alistirma");
-  if(b.dataset.sayfa==="alistirma" && !soruV) yeniSoru();
+  ["kutu","alistirma","ilerleme"].forEach(id=>$(id).classList.toggle("gizli", id!==s));
+  if(s==="alistirma" && !soruV) yeniSoru();
+  if(s==="ilerleme") ilerlemeCiz();
 });
+kaydet();
 
 // --- nasıl çalışır penceresi: 5 sn sonra kendiliğinden kapanır ---
 let bilgiZaman;
