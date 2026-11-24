@@ -31,8 +31,9 @@ nav.alt button{flex:1;border:0;background:none;padding:10px 0 12px;font:600 14px
 nav.alt button.aktif{color:var(--kirmizi)}
 nav.alt button i{display:block;font-style:normal;font-size:22px}
 .sekmeler{display:flex;gap:6px;margin:6px 0 12px}
-.sekmeler button{flex:1;border:0;border-radius:12px;padding:9px 0;font:600 15px var(--yazitipi);cursor:pointer;color:#1b0a0a;opacity:.45;border-bottom:4px solid rgba(0,0,0,.25)}
-.sekmeler button.aktif{opacity:1;transform:translateY(-2px)}
+.sekmeler button{flex:1;border:3px solid transparent;border-radius:12px;padding:8px 0;font:800 15px var(--yazitipi);cursor:pointer;color:#1b0a0a;box-shadow:0 4px 0 rgba(0,0,0,.25);transition:transform .15s,box-shadow .15s}
+.sekmeler button:active{transform:translateY(3px);box-shadow:0 1px 0 rgba(0,0,0,.25)}
+.sekmeler button.aktif{border-color:var(--yazi);transform:translateY(-3px);box-shadow:0 7px 0 rgba(0,0,0,.3)}
 .k{background:var(--kirmizi)}.m{background:var(--mavi)}.s{background:var(--sari)}
 /* plaka */
 .plaka{background:var(--plaka);border-radius:14px;padding:12px 8px;box-shadow:0 6px 0 var(--plaka-k),0 10px 24px rgba(0,0,0,.18);display:grid;grid-template-columns:1fr 84px 1fr;column-gap:8px;color:var(--plaka-yazi);text-shadow:0 1px 0 rgba(255,255,255,.25)}
@@ -46,7 +47,16 @@ nav.alt button i{display:block;font-style:normal;font-size:22px}
 .cubuk{position:absolute;left:4px;right:4px;height:40px;border-radius:7px;background:var(--plaka);box-shadow:0 3px 0 var(--plaka-k),0 4px 10px rgba(0,0,0,.3);display:flex;flex-direction:column;align-items:center;justify-content:center;font-weight:700;font-size:11px;line-height:1.1;text-align:center;transition:top .25s cubic-bezier(.3,1.4,.5,1);cursor:pointer;border:2px solid rgba(0,0,0,.2)}
 .cubuk small{font-size:10px;opacity:.8}
 /* cümle kartı */
-.cumle{background:var(--kart);border-radius:16px;padding:14px 16px;margin-top:18px;border:1px solid var(--cizgi);position:sticky;bottom:0;box-shadow:0 -6px 20px rgba(0,0,0,.08)}
+/* kutu ekranı: plaka kendi içinde kayar, cümle kartı hep görünür */
+#kutu:not(.gizli){height:100%;display:flex;flex-direction:column}
+.plaka-alan{flex:1;min-height:150px;overflow-y:auto;position:relative;padding:4px 10px 10px 2px;margin-right:-6px;scrollbar-width:thin;scrollbar-color:var(--plaka) var(--cizgi);overscroll-behavior:contain}
+.plaka-alan::-webkit-scrollbar{width:8px}
+.plaka-alan::-webkit-scrollbar-track{background:var(--cizgi);border-radius:8px}
+.plaka-alan::-webkit-scrollbar-thumb{background:var(--plaka);border-radius:8px}
+.asagi{position:sticky;bottom:0;margin-top:-34px;height:34px;display:flex;align-items:flex-end;justify-content:center;pointer-events:none;transition:opacity .2s}
+.asagi span{background:var(--yazi);color:var(--zemin);font-size:12px;font-weight:800;padding:3px 10px;border-radius:99px;box-shadow:0 2px 8px rgba(0,0,0,.25)}
+.asagi.yok{opacity:0}
+.cumle{background:var(--kart);border-radius:16px;padding:12px 16px;margin-top:10px;border:1px solid var(--cizgi);flex:none;box-shadow:0 -6px 20px rgba(0,0,0,.08)}
 .cumle .en{font-size:24px;font-weight:800}
 .cumle .tr{font-size:19px;color:var(--soluk);margin-top:4px}
 .cumle .tr b{color:var(--yazi);font-weight:600}
@@ -138,7 +148,10 @@ nav.alt button i{display:block;font-style:normal;font-size:22px}
 <main>
   <section id="kutu">
     <div class="sekmeler" id="sekmeler"></div>
-    <div class="plaka" id="plaka"></div>
+    <div class="plaka-alan" id="plakaAlan">
+      <div class="plaka" id="plaka"></div>
+      <div class="asagi" id="asagi"><span>▼ kaydır</span></div>
+    </div>
     <div class="cubuk-sec">
       <button class="btn" id="onceki" aria-label="Önceki çubuk">◀</button>
       <div class="ad" id="cubukAd"></div>
@@ -244,7 +257,12 @@ function ciz(){
   $("cTr").textContent = c.tr;
   $("cIpucu").textContent = "💡 " + IPUCU[durum.plaka][durum.satir];
   depo.koy("durum", durum);
+  ipucuOku();
 }
+// plaka alanı: aşağıda gizli satır varsa "▼ kaydır" etiketi görünür
+function ipucuOku(){ const a = $("plakaAlan"); $("asagi").classList.toggle("yok", a.scrollTop + a.clientHeight >= a.scrollHeight - 6); }
+$("plakaAlan").addEventListener("scroll", ipucuOku, {passive:true});
+window.addEventListener("resize", ipucuOku);
 $("plaka").onclick = e => {
   const s = e.target.closest(".satir");
   if(s && s.classList.contains("kapali")) return;
