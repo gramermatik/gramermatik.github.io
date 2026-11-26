@@ -1,6 +1,6 @@
 // Önce internetten al (güncel kalsın), yoksa önbellekten aç (çevrimdışı çalışsın)
-const CACHE = "gramermatik-v7";
-const DOSYALAR = ["./", "index.html", "veri.js", "gramer.js", "manifest.json", "ikon.svg"];
+const CACHE = "gramermatik-v8";
+const DOSYALAR = ["./", "index.html", "veri.js", "gramer.js", "kod.js", "manifest.json", "ikon.svg"];
 self.addEventListener("install", e => e.waitUntil(caches.open(CACHE).then(c => c.addAll(DOSYALAR)).then(() => self.skipWaiting())));
 self.addEventListener("activate", e => e.waitUntil(caches.keys().then(k => Promise.all(k.filter(x => x !== CACHE).map(x => caches.delete(x)))).then(() => self.clients.claim())));
 self.addEventListener("fetch", e => {

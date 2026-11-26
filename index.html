@@ -147,6 +147,21 @@ nav.alt button i{display:block;font-style:normal;font-size:1.4rem}
 .bilgi-kart .kapat{position:absolute;top:.75rem;right:.75rem;border:0;background:var(--zemin);color:var(--yazi);width:2rem;height:2rem;border-radius:50%;cursor:pointer}
 .bilgi-kart .sure{position:absolute;left:0;bottom:0;height:5px;width:100%;background:var(--kirmizi);transform-origin:left}
 @keyframes azal{to{transform:scaleX(0)}}
+/* erişim kodu ekranı */
+.kilit{position:fixed;inset:0;z-index:50;background:var(--zemin);display:flex;align-items:center;justify-content:center;padding:var(--bosluk);overflow:auto}
+.kilit-kart{width:100%;max-width:24rem;text-align:center}
+.kilit-logo{display:flex;justify-content:center;gap:.4rem;margin-bottom:1rem}
+.kilit-logo i{width:1.1rem;height:4.2rem;border-radius:.4rem;box-shadow:0 4px 0 rgba(0,0,0,.25)}
+.kilit h1{margin:0;font-size:2rem;font-weight:900}
+.kilit h1 span{color:var(--kirmizi)}
+.kilit p{color:var(--soluk);margin:.5rem 0 1.4rem;line-height:1.4}
+.kilit input{width:100%;text-align:center;font-size:1.35rem;font-weight:900;letter-spacing:.12em;padding:.8rem;border-radius:14px;border:2px solid var(--cizgi);background:var(--kart);color:var(--yazi);text-transform:uppercase}
+.kilit input:focus{outline:none;border-color:var(--kirmizi)}
+.kilit input.hata{border-color:var(--kirmizi);animation:salla .35s}
+@keyframes salla{25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
+.kilit .btn.ana{width:100%;margin-top:.8rem;padding:.85rem;font-size:1.1rem;font-weight:900}
+.kilit-mesaj{min-height:1.4rem;margin-top:.7rem;font-weight:700;color:var(--kirmizi)}
+.kilit small{display:block;color:var(--soluk);margin-top:1rem;line-height:1.4}
 .gizli{display:none!important}
 
 /* kısa ekranlar: cümle kartı daralsın, plakaya yer kalsın */
@@ -181,6 +196,17 @@ nav.alt button i{display:block;font-style:normal;font-size:1.4rem}
 </style>
 </head>
 <body>
+<div class="kilit gizli" id="kilit" role="dialog" aria-labelledby="kilitBaslik">
+  <form class="kilit-kart" id="kilitForm" autocomplete="off">
+    <div class="kilit-logo"><i class="k"></i><i class="m"></i><i class="s"></i></div>
+    <h1 id="kilitBaslik">Gramer<span>matik</span></h1>
+    <p>Uygulamayı açmak için kutunuzla birlikte gelen <b>erişim kodunu</b> girin.</p>
+    <input id="kodGir" inputmode="text" autocapitalize="characters" spellcheck="false" placeholder="GM-XXXX-XXXX" maxlength="14" aria-label="Erişim kodu">
+    <button class="btn ana" type="submit">Aç</button>
+    <div class="kilit-mesaj" id="kilitMesaj" role="alert"></div>
+    <small>Kodu bir kez girmeniz yeterli, bu cihaz hatırlar.<br>Kodunuz yoksa Gramermatik satıcınıza başvurun.</small>
+  </form>
+</div>
 <header><h1>Gramer<span>matik</span></h1><div class="ust-sag"><div class="sayac" id="sayac"></div><button class="yardim" id="yardim" aria-label="Nasıl çalışır?">?</button></div></header>
 
 <div class="bilgi kapan" id="bilgi" role="dialog" aria-labelledby="bilgiBaslik"><div class="bilgi-kart">
@@ -261,6 +287,7 @@ nav.alt button i{display:block;font-style:normal;font-size:1.4rem}
 
 <script src="veri.js"></script>
 <script src="gramer.js"></script>
+<script src="kod.js"></script>
 <script>
 const $ = id => document.getElementById(id);
 const RENK = {kirmizi:["#d62828","#a51c1c"],mavi:["#7cc6e8","#3f93bb"],sari:["#f4a72a","#c27a0e"],kirmizi2:["#d62828","#a51c1c"]};
@@ -458,7 +485,24 @@ $("bilgiKapat").onclick = bilgiKapat;
 $("bilgi").onclick = e => { if(e.target.id==="bilgi") bilgiKapat(); };
 $("yardim").onclick = bilgiAc;
 
-ciz(); puanCiz(); bilgiAc();
+// --- erişim kodu: geçerli kod girilmeden uygulama açılmaz ---
+function kilitAc(){ $("kilit").classList.add("gizli"); bilgiAc(); }
+$("kodGir").addEventListener("input", e => {
+  // yazarken GM-XXXX-XXXX biçimine sok
+  const k = kodTemizle(e.target.value).slice(0,8);
+  e.target.value = k.length ? "GM-" + k.slice(0,4) + (k.length>4 ? "-" + k.slice(4) : "") : "";
+  e.target.classList.remove("hata"); $("kilitMesaj").textContent = "";
+});
+$("kilitForm").onsubmit = e => {
+  e.preventDefault();
+  const g = $("kodGir");
+  if(kodGecerli(g.value)){ depo.koy("kod", kodBicim(g.value)); kilitAc(); }
+  else { g.classList.remove("hata"); void g.offsetWidth; g.classList.add("hata"); $("kilitMesaj").textContent = kodTemizle(g.value).length<8 ? "Kod eksik görünüyor." : "Bu kod geçerli değil. Lütfen kontrol edin."; }
+};
+
+ciz(); puanCiz();
+if(kodGecerli(depo.al("kod",""))) bilgiAc();
+else { $("kilit").classList.remove("gizli"); setTimeout(()=>$("kodGir").focus(), 300); }
 if("serviceWorker" in navigator && location.protocol.startsWith("http")) navigator.serviceWorker.register("sw.js").catch(()=>{});
 </script>
 </body>
